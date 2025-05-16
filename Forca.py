@@ -19,7 +19,7 @@ for i in range (0,8):
         for j in range (0,LP):
             if letras[z]==palavra[j]:
                 trava[j]=1
-
+    os.system('cls')
     for h in range(0,LP):
         print(palavra[h] if trava[h] == 1 else"_",end="")
 
