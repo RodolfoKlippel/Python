@@ -4,7 +4,7 @@ import os
 
 palavra=input("Qual será a Palavra da forca? ")
 
-print("\n"*10)
+os.system('cls')
 
 letras = [""]*8
 
