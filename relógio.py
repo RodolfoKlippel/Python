@@ -1,5 +1,6 @@
 import math
 import time
+import os
 
 #display de relógio digital
 
@@ -17,3 +18,4 @@ for i in range(23, -1,-1): #HORAS
 
             print(f"{i:02}:{j:02}:{z:02}")
             time.sleep(1)
+            os.system('cls')
