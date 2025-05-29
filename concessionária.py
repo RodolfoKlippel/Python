@@ -27,6 +27,7 @@ def venda():
 	precoCarro=int(input("Diga o preço que você quer pelo carro: "))
 	for i in range(len(lista[0])):
 		if (caixa[0]-precoCarro)<0:
+			os.system("cls")
 			print("Compra impossível.")
 			break
 		if carroDeVenda == lista[0][i]:
@@ -72,7 +73,7 @@ def aluguel():
 	for i in range(len(lista[0])):
 		if carroAlugado == lista[0][i]:
 			dias=int(input("Por quantos dias você deseja alugá-lo? "))
-			respAlug=input(f"\nO preço do aluguel do {lista[0][i]} será: R${aluguel*dias:.2f}\nVocê aceita a oferta? [S/N] ")
+			respAlug=input(f"\nO preço do aluguel do {lista[0][i]} será: R${aluguel*dias:.2f}\nVocê aceita a oferta? [S/N] ").upper()
 			os.system("cls")
 			if respAlug=="S":
 				print("\nO carro foi alugado!")
@@ -81,9 +82,9 @@ def aluguel():
 			elif respAlug=="N":
 				print("\nO carro não foi alugado.")
 				break
-			elif respAlug not in ["S","N"]:
-					print("\nResposta inválida\n")
-					break
+			else:
+				print("\nResposta inválida\n")
+				break
 		elif carroAlugado != lista[0][i] and i == len(lista[0])-1:
 			print("Carro não encontrado.")
 	
@@ -118,20 +119,20 @@ def compra():
 			elif decisao not in ["S","N"]:
 				print("\nResposta inválida\n")
 				break
-					
-while True:
-	menu=input("\nDiga o que você deseja fazer:\n\n(C) Comprar um Carro\n(V) Vender um Carro\n(A) Alugar um Carro\n(M) Ver Menu\n").upper()
-	if menu=="":
-		Arquivo()
-		break
-	os.system("cls")
-	if menu=="C":
-		compra()
-	elif menu=="V":
-		venda()
-	elif menu=="A":
-		aluguel()
-	elif menu=="M":
-		Arquivo()
-	else:
-		print("\nOpção Inválida.")
+if __name__ == "__main__":
+	while True:
+		menu=input("\nDiga o que você deseja fazer:\n\n(C) Comprar um Carro\n(V) Vender um Carro\n(A) Alugar um Carro\n(M) Ver Menu\n").upper()
+		if menu=="":
+			Arquivo()
+			break
+		os.system("cls")
+		if menu=="C":
+			compra()
+		elif menu=="V":
+			venda()
+		elif menu=="A":
+			aluguel()
+		elif menu=="M":
+			Arquivo()
+		else:
+			print("\nOpção Inválida.")
