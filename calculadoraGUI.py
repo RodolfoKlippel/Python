@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QPushButton
 class MainWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
-		self.setGeometry(700,300,400,500) # dimensões da calculadora
+		self.setGeometry(700,300,500,700) # dimensões da calculadora
 
 		self.calculo = QLabel("",self) # variáveis de cálculo
 		self.conta=""
@@ -39,11 +39,23 @@ class MainWindow(QMainWindow):
 		self.calculo.setStyleSheet("font-size: 25px; font-family: Comic Sans MS")
 
 		grid=QGridLayout()  #grid
-	
+
+		self.setStyleSheet("""QPushButton{font-size: 25px;
+					font-family: Comic Sans Ms;
+					padding: 10px;
+					margin: 5px;
+					border: 2px solid;
+					border-radius: 10px}
+					 
+					QPushButton:hover{
+					background-color: #999e9b;
+					}
+					""")
+
 		grid.addWidget(self.botão1,1,0)	#posicionamento de cada botão na grid
 		grid.addWidget(self.botão2,1,1)
 		grid.addWidget(self.botão3,1,2)
-		grid.addWidget(self.botão_apaga,5,0)
+		grid.addWidget(self.botão_apaga,5,3)
 		grid.addWidget(self.botão4,2,0)
 		grid.addWidget(self.botão5,2,1)
 		grid.addWidget(self.botão6,2,2)
