@@ -71,6 +71,7 @@ class MainWindow(QMainWindow):
 		grid.addWidget(self.botão_vezes,3,3)
 		grid.addWidget(self.botão_div,4,3)
 		grid.addWidget(self.botão1,1,3)
+		self.botao_display.setDisabled(True)
 
 		self.botão1.clicked.connect(self.clique1)	#interação de clique nos botões com as funções
 		self.botão2.clicked.connect(self.clique2)
