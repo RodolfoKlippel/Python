@@ -7,30 +7,20 @@ from PyQt5.QtWidgets import QLabel
 class MainWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
-
 		self.setGeometry(700,300,510,200)
 		self.timer = QTimer(self)
-
-		self.alarme = str(datetime.datetime(2200,5,30,15,37,40))
-		self.horario = datetime.datetime.now()
-		self.horario = self.horario.strftime("%Y %m %d %H %M %S")
-
 		self.label = QLabel("",self)
-		self.initUI()
+		
+		self.timer.timeout.connect(self.initUI)
+		self.timer.start(1000)
 		
 	def initUI(self):
-		self.timer.timeout.connect(self.repetidor)
-		self.timer.start(1000)
-	
-	def repetidor(self):
 		self.horario = datetime.datetime.now()
 		self.horario = self.horario.strftime("%H:%M:%S %p")
 		self.label.setText(f"{self.horario}")
 
 		self.label.setGeometry(10,10,530,160)
 		self.label.setStyleSheet("font-size:80px; font-family: Comic Sans MS;")
-
-		self.horario = str(datetime.datetime.now())
 		
 def main():
 	aplicativo = QApplication(sys.argv)
