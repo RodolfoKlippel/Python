@@ -1,6 +1,7 @@
 import sys
 import datetime
-from datetime import date
+from datetime import date,datetime
+from datetime import timedelta
 import time
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtCore import QTimer
@@ -44,9 +45,9 @@ class MainWindow(QMainWindow):
 					}
 					""")
 		
-		self.horario = datetime.datetime(2025,5,30,0,0,0)
-		self.horario = self.horario.strftime("%H:%M:%S")
-		self.label.setText(f"{self.horario}")
+		self.horario = datetime(2025, 5, 30, 0, 0, 0)
+		self.horario2 = self.horario.strftime("%H:%M:%S")
+		self.label.setText(f"{self.horario2}")
 
 		self.label.setGeometry(88,10,530,80)
 		self.label.setStyleSheet("font-size:70px; font-family: Comic Sans MS;")
@@ -58,13 +59,13 @@ class MainWindow(QMainWindow):
 		self.botão4.clicked.connect(self.resetar)
 
 		self.timer.timeout.connect(self.continuar)
-		self.timer.start(100)
+		self.timer.start(1000)
 	
 	def continuar(self):
 		if self.continua == 1:
-			self.horario = date.fromtimestamp(time.time())
-			self.horario = self.horario.strftime("%H:%M:%S")
-			self.label.setText(f"{self.horario}")
+			self.horario = self.horario + timedelta(seconds=1)
+			self.horario2 = self.horario.strftime("%H:%M:%S")
+			self.label.setText(f"{self.horario2}")
 
 			self.label.setGeometry(88,10,530,80)
 			self.label.setStyleSheet("font-size:70px; font-family: Comic Sans MS;")
@@ -77,9 +78,9 @@ class MainWindow(QMainWindow):
 		self.continua = 0
 
 	def resetar(self):
-		self.horario = datetime.datetime(2025,5,30,0,0,0)
-		self.horario = self.horario.strftime("%H:%M:%S")
-		self.label.setText(f"{self.horario}")
+		self.horario = datetime(2025,5,30,0,0,0)
+		self.horario2 = self.horario.strftime("%H:%M:%S")
+		self.label.setText(f"{self.horario2}")
 
 		self.label.setGeometry(88,10,530,80)
 		self.label.setStyleSheet("font-size:70px; font-family: Comic Sans MS;")
