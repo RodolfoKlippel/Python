@@ -1,12 +1,11 @@
 import sys
 import datetime
-from datetime import date,datetime
+from datetime import datetime
 from datetime import timedelta
-import time
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QLabel
-from PyQt5.QtWidgets import QButtonGroup,QPushButton,QGridLayout,QWidget
+from PyQt5.QtWidgets import QPushButton,QGridLayout,QWidget
 
 class MainWindow(QMainWindow):
 	def __init__(self):
