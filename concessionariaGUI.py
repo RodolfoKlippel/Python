@@ -18,10 +18,12 @@ class MainWindow(QWidget):
 		self.line_edit = QLineEdit(self)
 		self.botaoLEC = QPushButton("SUBMIT",self)
 		self.botaoLEV = QPushButton("SUBMIT",self)
+		self.botaoLEVenda = QPushButton("SUBMIT",self)
 		self.comp = QLabel("Que carro você gostaria de comprar?",self)
 		self.vend = QLabel("Qual o nome do carro que você deseja vender?",self)
 		self.planilha_direta = QLabel("",self)
-		self.botao_sim = QPushButton("SIM",self)
+		self.botao_simC = QPushButton("SIM",self)
+		self.botao_simV = QPushButton("SIM",self)
 		self.botao_nao = QPushButton("NÃO",self)
 
 		self.line_edit.hide()
@@ -31,22 +33,27 @@ class MainWindow(QWidget):
 		self.vend.hide()
 		self.planilha_direta.hide()
 		self.botao6.hide()
-		self.botao_sim.hide()
+		self.botao_simC.hide()
+		self.botao_simV.hide()
 		self.botao_nao.hide()
+		self.botaoLEVenda.hide()
 
 		self.lista=[["MUSTANG","FERRARI","LAMBORGHINI","BULGATI","LIMOUSINE"],
         [10000,15000,14000,20000,40000],
         [1,1,1,1,1]]
 		self.caixa=15000
+		self.trava = 0
 		
 		self.botao1.clicked.connect(self.compra)
 		self.botao2.clicked.connect(self.venda)
 		self.botao3.clicked.connect(self.aluguel)
 		self.botao5.clicked.connect(self.planilha)
-		self.botao_sim.clicked.connect(self.carro_comprado)
+		self.botao_simC.clicked.connect(self.carro_comprado)
+		self.botao_simV.clicked.connect(self.carro_vendido)
 		self.botao_nao.clicked.connect(self.aparece)
 		self.botaoLEC.clicked.connect(self.compra_decisao)
 		self.botaoLEV.clicked.connect(self.venda_valor)
+		self.botaoLEVenda.clicked.connect(self.venda_decisao)
 		self.botao6.clicked.connect(self.aparece)
 
 		self.initUI()
@@ -65,9 +72,11 @@ class MainWindow(QWidget):
 		self.vbox.addWidget(self.line_edit)
 		self.vbox.addWidget(self.botaoLEC)
 		self.vbox.addWidget(self.botaoLEV)
+		self.vbox.addWidget(self.botaoLEVenda)
 		self.vbox.addWidget(self.planilha_direta)
 		self.vbox.addWidget(self.botao6)
-		self.vbox.addWidget(self.botao_sim)
+		self.vbox.addWidget(self.botao_simC)
+		self.vbox.addWidget(self.botao_simV)
 		self.vbox.addWidget(self.botao_nao)
 		
 		self.setLayout(self.vbox)
@@ -106,7 +115,7 @@ class MainWindow(QWidget):
 				break
 		self.line_edit.hide()
 		self.botaoLEC.hide()
-		self.botao_sim.show()
+		self.botao_simC.show()
 		self.botao_nao.show()
 		
 	def carro_comprado(self):
@@ -131,13 +140,34 @@ class MainWindow(QWidget):
 		self.vend.setAlignment(Qt.AlignCenter)
 		
 	def venda_valor(self):
+		self.botaoLEV.hide()
+		self.botaoLEVenda.show()
 		self.carroVend = self.line_edit.text().upper()
 		self.vend.setText(f"Por quanto você deseja vender o(a) {self.carroVend}?")
 		self.line_edit.setText("")
+		self.trava = 1
 		
 	
 	def venda_decisao(self):
-		pass
+		self.preco_carro = int(self.line_edit.text())
+		self.line_edit.setText("")
+		self.vend.setText(f"O proprietário aceita comprar o carro?\nCarro: {self.carroVend}\nPreço: {self.preco_carro}")
+		self.line_edit.hide()
+		self.botaoLEVenda.hide()
+		self.botao_simV.show()
+		self.botao_nao.show()
+
+	def carro_vendido(self):
+		self.caixa-=self.preco_carro
+		for i in range(0,len(self.lista[0])):
+			if self.carroVend == self.lista[0][i]:
+				self.lista[2][i]+=1
+				break
+			elif self.carroVend != self.lista[0][i] and i == len(self.lista[0])-1:
+				self.lista[0].append(self.carroVend)
+				self.lista[1].append(self.preco_carro*1.15)
+				self.lista[2].append(1)
+		self.aparece()
 
 	def aluguel(self):
 		pass
@@ -164,6 +194,9 @@ class MainWindow(QWidget):
 		self.botao5.hide()
 	
 	def aparece(self):
+		if self.trava == 1:
+			self.vend.setText(f"Qual o nome do carro que você deseja vender?")
+			self.trava = 0
 		self.vend.hide()
 		self.comp.hide()
 		self.line_edit.hide()
@@ -172,7 +205,9 @@ class MainWindow(QWidget):
 		self.planilha_direta.hide()
 		self.botao6.hide()
 		self.botao_nao.hide()
-		self.botao_sim.hide()
+		self.botao_simC.hide()
+		self.botao_simV.hide()
+		self.botaoLEVenda.hide()
 	
 		self.Texto.show()
 		self.botao1.show()
