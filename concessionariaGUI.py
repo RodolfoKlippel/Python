@@ -11,7 +11,6 @@ class MainWindow(QWidget):
 		self.Texto = QLabel("O que você deseja fazer?",self)
 		self.botao1 = QPushButton("COMPRA",self)
 		self.botao2 = QPushButton("VENDA",self)
-		self.botao3 = QPushButton("ALUGUEL",self)
 		self.botao5 = QPushButton("PLANILHA",self)
 		self.botao4 = QPushButton("SAIR",self)
 		self.botao6 = QPushButton("VOLTAR",self)
@@ -46,7 +45,6 @@ class MainWindow(QWidget):
 		
 		self.botao1.clicked.connect(self.compra)
 		self.botao2.clicked.connect(self.venda)
-		self.botao3.clicked.connect(self.aluguel)
 		self.botao5.clicked.connect(self.planilha)
 		self.botao_simC.clicked.connect(self.carro_comprado)
 		self.botao_simV.clicked.connect(self.carro_vendido)
@@ -55,6 +53,7 @@ class MainWindow(QWidget):
 		self.botaoLEV.clicked.connect(self.venda_valor)
 		self.botaoLEVenda.clicked.connect(self.venda_decisao)
 		self.botao6.clicked.connect(self.aparece)
+		self.botao4.clicked.connect(self.close)
 
 		self.initUI()
 
@@ -64,7 +63,6 @@ class MainWindow(QWidget):
 		self.vbox.addWidget(self.Texto)
 		self.vbox.addWidget(self.botao1)
 		self.vbox.addWidget(self.botao2)
-		self.vbox.addWidget(self.botao3)
 		self.vbox.addWidget(self.botao5)
 		self.vbox.addWidget(self.botao4)
 		self.vbox.addWidget(self.vend)
@@ -169,9 +167,6 @@ class MainWindow(QWidget):
 				self.lista[2].append(1)
 		self.aparece()
 
-	def aluguel(self):
-		pass
-
 	def planilha(self):
 		self.some()
 		self.planilha_direta.show()
@@ -180,7 +175,7 @@ class MainWindow(QWidget):
 		self.texto_planilha = ""
 		self.texto_planilha += "Planilha da Empresa:\n"
 		for j in range(0,len(self.lista[0])):
-			self.texto_planilha += f"O carro {self.lista[0][j]} Possui o preço de {self.lista[1][j]} e Um estoque de {self.lista[2][j]} carro\n"
+			self.texto_planilha += f"O carro {self.lista[0][j]} Possui o preço de {self.lista[1][j]:.2f} e Um estoque de {self.lista[2][j]} carro\n"
 		self.texto_planilha += f"Caixa da Empresa: {self.caixa}"
 		
 		self.planilha_direta.setText(f"{self.texto_planilha}")
@@ -189,7 +184,6 @@ class MainWindow(QWidget):
 		self.Texto.hide()
 		self.botao1.hide()
 		self.botao2.hide()
-		self.botao3.hide()
 		self.botao4.hide()
 		self.botao5.hide()
 	
@@ -212,7 +206,6 @@ class MainWindow(QWidget):
 		self.Texto.show()
 		self.botao1.show()
 		self.botao2.show()
-		self.botao3.show()
 		self.botao4.show()
 		self.botao5.show()
 		
