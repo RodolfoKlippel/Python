@@ -2,10 +2,10 @@ import random
 import time
 import os
 
-Local_Arquivo = "C:/Users/RODOLFO/Desktop/arquivo.json"
-lista=[["MUSTANG","FERRARI","LAMBORGHINI","BULGATI","LIMOUSINE"],
-        [10000,15000,14000,20000,40000],
-        [1,1,1,1,1]]
+Local_Arquivo = "C:/Users/rodolfo.klippel/Desktop/arquivo.txt"
+lista=[['MUSTANG','FERRARI','LAMBORGHINI','BULGATI','LIMOUSINE'],
+[10000,15000,14000,20000,40000],
+[1,1,1,1,1]]
 caixa=[15000]
 
 def menuCarros():
@@ -16,11 +16,49 @@ def menuCarros():
             aux+=1
 
 def Arquivo():
+	print("Planilha da Empresa:\n")
+	for j in range(0,len(lista[0])):
+		print(f"O carro {lista[0][j]} Possui o preço de {lista[1][j]} e Um estoque de {lista[2][j]} carro")
+	print(f"O caixa é de: {caixa[0]}")
+	print("\n\n[",end="")
+
+	for i in range(0,3):
+		print("[",end="")
+		for j in range(0,len(lista[0])):
+			print(f"'{lista[i][j]}'",end="")
+			if j<len(lista[0])-1:
+				print(",",end="")
+		if i<2:	
+			print("],")
+		else:
+			print("]",end="")
+	print("]",end="")
+
 	with open(Local_Arquivo,"w") as arq:
 		arq.write("Planilha da Empresa:\n")
 		for j in range(0,len(lista[0])):
 			arq.write(f"O carro {lista[0][j]} Possui o preço de {lista[1][j]} e Um estoque de {lista[2][j]} carro\n")
 		arq.write(f"O caixa é de: {caixa[0]}")
+		arq.write("\n\n")
+		text="\n["
+		for i in range(0,3):
+			if i==0:
+				text+="["
+			else:
+				text+="\n["
+			for j in range(0,len(lista[0])):
+				if i==0:
+					text+=f"'{lista[i][j]}'"
+				else:
+					text+=f"{lista[i][j]}"
+				if j<len(lista[0])-1:
+					text+=","
+			if i<2:	
+				text+="],"
+			else:
+				"]"
+		text+="]]"
+		arq.write(f"{text}")
 
 def venda():
 	carroDeVenda=input("Diga o carro que você deseja vender: ").upper()
@@ -119,20 +157,22 @@ def compra():
 			elif decisao not in ["S","N"]:
 				print("\nResposta inválida\n")
 				break
+			
 if __name__ == "__main__":
 	while True:
-		menu=input("\nDiga o que você deseja fazer:\n\n(C) Comprar um Carro\n(V) Vender um Carro\n(A) Alugar um Carro\n(M) Ver Menu\n").upper()
-		if menu=="":
-			Arquivo()
-			break
+		menu=input("\nDiga o que você deseja fazer:\n\n(C) Comprar um Carro\n(V) Vender um Carro\n(A) Alugar um Carro\n(P) Ver Planilha\n(S) Para Sair\n").upper()
 		os.system("cls")
-		if menu=="C":
-			compra()
-		elif menu=="V":
-			venda()
-		elif menu=="A":
-			aluguel()
-		elif menu=="M":
-			Arquivo()
-		else:
-			print("\nOpção Inválida.")
+		match(menu):
+			case "S":
+				Arquivo()
+				break
+			case "C":
+				compra()
+			case "V":
+				venda()
+			case "A":
+				aluguel()
+			case "P":
+				Arquivo()
+			case _:
+				print("\nOpção Inválida.")
