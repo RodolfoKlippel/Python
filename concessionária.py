@@ -1,178 +1,104 @@
-import random
-import time
 import os
+import csv
 
-Local_Arquivo = "C:/Users/rodolfo.klippel/Desktop/arquivo.txt"
-lista=[['MUSTANG','FERRARI','LAMBORGHINI','BULGATI','LIMOUSINE'],
-[10000,15000,14000,20000,40000],
-[1,1,1,1,1]]
-caixa=[15000]
+Local_Arquivo = "C:/Users/RODOLFO/Desktop/arquivo.csv"
+lista = [{'nome': 'MUSTANG', 'preco': '10000', 'estoque': '1', 'ano': '2020'},{'nome': 'FERRARI', 'preco': '15000', 'estoque': '1', 'ano': '2000'},{'nome': 'LAMBORGHINI', 'preco': '14000', 'estoque': '1', 'ano': '1990'}, {'nome': 'LIMOUSINE', 'preco': '40000', 'estoque': '1', 'ano': '1970'}]
+caixa = 15000
 
-def menuCarros():
-    aux=1
-    for i in range(0,len(lista[0])):
-        if lista[2][i]>0:
-            print(aux,". ",lista[0][i])
-            aux+=1
+def existe_arquivo():
+	if os.path.exists(Local_Arquivo):
+		dados = analise()
+		Arquivo(dados)
+	else:
+		Arquivo(lista)
 
-def Arquivo():
-	print("Planilha da Empresa:\n")
-	for j in range(0,len(lista[0])):
-		print(f"O carro {lista[0][j]} Possui o preço de {lista[1][j]} e Um estoque de {lista[2][j]} carro")
-	print(f"O caixa é de: {caixa[0]}")
-	print("\n\n[",end="")
+def Arquivo(dados):
+	with open(Local_Arquivo,"w",newline="") as arq:
+		cabecalho = ["nome","preco","estoque","ano"]
+		escreve = csv.DictWriter(arq,fieldnames=cabecalho,delimiter=";")
 
-	for i in range(0,3):
-		print("[",end="")
-		for j in range(0,len(lista[0])):
-			print(f"'{lista[i][j]}'",end="")
-			if j<len(lista[0])-1:
-				print(",",end="")
-		if i<2:	
-			print("],")
-		else:
-			print("]",end="")
-	print("]",end="")
+		escreve.writeheader()
+		for linha in dados[0:]:
+			escreve.writerow(linha)
 
-	with open(Local_Arquivo,"w") as arq:
-		arq.write("Planilha da Empresa:\n")
-		for j in range(0,len(lista[0])):
-			arq.write(f"O carro {lista[0][j]} Possui o preço de {lista[1][j]} e Um estoque de {lista[2][j]} carro\n")
-		arq.write(f"O caixa é de: {caixa[0]}")
-		arq.write("\n\n")
-		text="\n["
-		for i in range(0,3):
-			if i==0:
-				text+="["
-			else:
-				text+="\n["
-			for j in range(0,len(lista[0])):
-				if i==0:
-					text+=f"'{lista[i][j]}'"
-				else:
-					text+=f"{lista[i][j]}"
-				if j<len(lista[0])-1:
-					text+=","
-			if i<2:	
-				text+="],"
-			else:
-				"]"
-		text+="]]"
-		arq.write(f"{text}")
+def analise():
+	dados = []
+	with open(Local_Arquivo,"r",encoding="utf8") as arq:
+
+		checa = csv.DictReader(arq, delimiter=";")
+		for linha in checa:
+			dados.append(linha)
+	return dados
 
 def venda():
-	carroDeVenda=input("Diga o carro que você deseja vender: ").upper()
-	precoCarro=int(input("Diga o preço que você quer pelo carro: "))
-	for i in range(len(lista[0])):
-		if (caixa[0]-precoCarro)<0:
-			os.system("cls")
-			print("Compra impossível.")
-			break
-		if carroDeVenda == lista[0][i]:
-			if precoCarro < lista[1][i]*0.84:
-				print("\nO carro foi vendido!")
-				caixa[0]=caixa[0]-precoCarro
-				lista[2][i]+=1
-				break
-			else:
-				respDono=input("\nO dono da concessionária irá aceitar a oferta? ").upper()
-				if respDono=="S":
-					print("\nO carro foi vendido!")
-					caixa[0]=caixa[0]-precoCarro
-					lista[2][i]+=1
-					break
-				elif respDono=="N":
-					print("\nO carro não foi vendido.")
-					break
-				elif respDono not in ["S","N"]:
-					print("\nResposta inválida\n")
-					break
-		elif carroDeVenda != lista[0][i] and i==len(lista[0])-1:
-			respDono=input("\nO dono da concessionária irá aceitar a oferta? ").upper()
-			if respDono=="S" and (caixa[0]-precoCarro)>=0:
-				print("\nO carro foi vendido!")
-				caixa[0]=caixa[0]-precoCarro
-				lista[0].append(carroDeVenda)
-				lista[1].append(precoCarro)
-				lista[2].append(1)
-				break
-			elif respDono=="N":
-				print("\nO carro não foi vendido.")
-				break
-			elif respDono not in ["S","N"]:
-				print("\nResposta inválida\n")
+	global caixa
+	dados = analise()
+	carro_venda = input("Diga o carro que deseja vender: ").upper()
+	preco_venda = int(input("Diga o valor pelo qual deseja vender: "))
+	ano_carro = int(input("Diga o ano do carro: "))
+
+	decisao = input("O dono aceita comprar? [S/N] ").upper()
+	if decisao == "S":
+		print("\nCompra Realizada.\n")
+		for i in range(len(dados)):
+			if carro_venda == dados[i]['nome']:
+				caixa-=preco_venda
+				dados[i]['estoque'] = int(dados[i]['estoque']) + 1
 				break
 
-def aluguel():
-	aluguel=85
-	print("Lista de carros abertos para Aluguel:\n")
-	menuCarros()
-	carroAlugado=input("Diga o carro que deseja alugar: ").upper()
-	for i in range(len(lista[0])):
-		if carroAlugado == lista[0][i]:
-			dias=int(input("Por quantos dias você deseja alugá-lo? "))
-			respAlug=input(f"\nO preço do aluguel do {lista[0][i]} será: R${aluguel*dias:.2f}\nVocê aceita a oferta? [S/N] ").upper()
-			os.system("cls")
-			if respAlug=="S":
-				print("\nO carro foi alugado!")
-				caixa[0]=caixa[0]+aluguel*dias
-				break
-			elif respAlug=="N":
-				print("\nO carro não foi alugado.")
-				break
-			else:
-				print("\nResposta inválida\n")
-				break
-		elif carroAlugado != lista[0][i] and i == len(lista[0])-1:
-			print("Carro não encontrado.")
-	
-	
+			elif carro_venda not in dados[i].values() and i==len(dados)-1:
+				caixa-=preco_venda
+				carro = {
+					"nome":carro_venda,
+					"preco":str(preco_venda*1.2),
+					"estoque":"1",
+					"ano":str(ano_carro)
+				}
+				dados.append(carro)
+		Arquivo(dados)
+	elif decisao == "N":
+		print("\nCompra não realizada.\n")
+	else:
+		print("\nValor Inválido.\n")
+
 def compra():
-	
-	print("\nLista de carros Que podem ser comprados:")
-	menuCarros()
-	carroComprado=input("\nDiga o carro que deja comprar: ").upper()
+	global caixa
+	dados = analise()
+	carro_venda = input("Diga o carro que deseja comprar: ").upper()
 
-	if carroComprado not in lista[0]:
-		os.system("cls")
-		print("Opção inválida.")
+	for i in range(len(dados)):
+		if carro_venda == dados[i]['nome']:
+			decisao = input(f"\nO carro custará {int(dados[i]['preco']) * 1.31}\nVocê aceita? [S/N] ").upper()
+			if decisao == "S":
+				print("\nCompra Realizada.\n")
+				caixa+=int(dados[i]['preco'])*1.3
+				dados[i]['estoque'] = int(dados[i]['estoque']) - 1
 
-	for i in range(len(lista[0])):
-		if carroComprado == lista[0][i]:
-			preco=lista[1][i]*1.31
-			decisao=input(f"O preço do carro será: R${preco:.2f}\nVocê aceita? [S/N] ").upper()
-			os.system("cls")
-			if decisao=="S":
-				print("Compra realizada!")
-				caixa[0]=caixa[0]+preco
-				lista[2][i]-=1
-				if lista[2][i]==0:
-					lista[0].remove(lista[0][i])
-					lista[1].remove(lista[1][i])
-					lista[2].remove(lista[2][i])
-				break
-			elif decisao=="N":
-				print("Compra não realizada.")
-				break
-			elif decisao not in ["S","N"]:
-				print("\nResposta inválida\n")
-				break
-			
+				if dados[i]['estoque'] == 0:
+					dados.pop(i)
+				Arquivo(dados)
+			elif decisao == "N":
+				print("\nCompra não realizada.\n")
+			else:
+				print("\nValor Inválido.\n")
+			break
+		elif carro_venda != dados[i]['nome'] and i == len(dados) - 1:
+			print("\nCarro não encontrado.\n")
+
 if __name__ == "__main__":
+	existe_arquivo()
 	while True:
-		menu=input("\nDiga o que você deseja fazer:\n\n(C) Comprar um Carro\n(V) Vender um Carro\n(A) Alugar um Carro\n(P) Ver Planilha\n(S) Para Sair\n").upper()
+		print(f"\n{caixa}\n")
+		menu=input("""\nDiga o que você deseja fazer:\n\n(C) Comprar um Carro\n(V) Vender um Carro\n(S) Para Sair\n""").upper()
+		
 		os.system("cls")
 		match(menu):
 			case "S":
-				Arquivo()
+				existe_arquivo()
 				break
 			case "C":
 				compra()
 			case "V":
 				venda()
-			case "A":
-				aluguel()
-			case "P":
-				Arquivo()
 			case _:
 				print("\nOpção Inválida.")
